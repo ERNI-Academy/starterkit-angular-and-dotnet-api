@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "hmiui": {
+    "appui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/hmiui",
+            "outputPath": "dist/appui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -76,18 +76,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "hmiui:build"
+            "browserTarget": "appui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "hmiui:build:production"
+              "browserTarget": "appui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "hmiui:build"
+            "browserTarget": "appui:build"
           }
         },
         "test": {
@@ -111,18 +111,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "hmiui:serve"
+            "devServerTarget": "appui:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "hmiui:serve:production"
+              "devServerTarget": "appui:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "hmiui",
+  "defaultProject": "appui",
   "cli": {
     "analytics": false
   }
