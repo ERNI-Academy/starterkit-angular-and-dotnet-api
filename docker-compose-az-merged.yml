@@ -1,0 +1,20 @@
+# This file cannot be combined with Docker compose. It has to be uploaded to Azure already combined (at least what I could find)
+
+version: '3.8'
+services:
+  app.gateway:
+    image: '<my-cvs-server>.azurecr.io/app-gateway'
+    ports:
+      - '80:80' # Connect localhost 80 port to container 80 port
+    environment: 
+      - WEB_APP_PORT=80
+  app.api:
+    image: '<my-cvs-server>.azurecr.io/app-api'
+    volumes:
+      - db-data:/var/lib/sqlite/data
+  app.ui:
+    image: '<my-cvs-server>.azurecr.io/app-ui'
+    environment: 
+      - API_URL=/api
+volumes:
+  db-data:

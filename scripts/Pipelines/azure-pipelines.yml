@@ -1,0 +1,135 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'a4e5924c-8fc2-4076-a7de-37f3ed76b149'
+  dockerRegistryServiceConnectionName: 'ErniCvs2'
+  imageRepositoryAPI: 'app-api'
+  imageRepositoryUI: 'app-ui'
+  imageRepositoryGateway: 'app-gateway'
+  containerRegistry: 'erniabbcvs.azurecr.io'
+  dockerfilePathAPI: '$(Build.SourcesDirectory)/App.API/API/Dockerfile'
+  dockerfilePathUI: '$(Build.SourcesDirectory)/App.UI/Dockerfile'
+  dockerfilePathGateway: '$(Build.SourcesDirectory)/gateway/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+  # vmImageName: 'windows-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:  
+
+  - job: BuildAndTestAPI
+    displayName: Build, Test API
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        feedsToUse: 'select'
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: Dotnet Tests
+      # enabled: false
+      inputs:
+        command: 'test'
+        projects: '**/*Test*.csproj'
+
+      
+    # - task: VSTest@2
+      # This is the Visual Studio Tests task. It requires a windows agent (change it in selected from job: pool: vmImage)
+      # After successful run no tests were reported in the Test Run Tab (requires further investigation)
+      # Anyway I don't see the advantadges respect to DotNetCoreCLI@2 (test) task. So we keep this one.
+      
+    
+
+    
+
+  - job: BuildAndTestUI
+    displayName: Build, Test UI
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: Npm@1
+      displayName: Npm Install
+      inputs:
+        command: 'install'
+        workingDir: '$(Build.SourcesDirectory)/App.UI'
+        verbose: true
+    - task: Npm@1
+      displayName: Npm Build
+      inputs:
+        command: 'custom'
+        workingDir: '$(Build.SourcesDirectory)/App.UI'
+        customCommand: 'run build:prod'
+        
+
+  - job: PublishImages
+    displayName: Publish Images
+
+    dependsOn:
+    - BuildAndTestAPI
+    - BuildAndTestUI
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: Docker@2
+      displayName: (Gateway) Build and push an image to container registry
+      enabled: true
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepositoryGateway)
+        dockerfile: $(dockerfilePathGateway)
+        containerRegistry: $(dockerRegistryServiceConnectionName)
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: |
+          $(tag)
+          latest
+    - task: Docker@2
+      displayName: (UI) Build and push an image to container registry
+      enabled: true
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepositoryUI)
+        dockerfile: $(dockerfilePathUI)
+        containerRegistry: $(dockerRegistryServiceConnectionName)
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: |
+          $(tag)
+          latest
+    - task: Docker@2
+      # When we successfully publish the Image to ACR there is a 'Hook' in Azure that will trigger a Deployment in the Azure Web App
+      # so the step of deploying is not really necessary.
+      displayName: (API) Build and push an image to container registry
+      enabled: true
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepositoryAPI)
+        dockerfile: $(dockerfilePathAPI)
+        containerRegistry: $(dockerRegistryServiceConnectionName)
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: |
+          $(tag)
+          latest

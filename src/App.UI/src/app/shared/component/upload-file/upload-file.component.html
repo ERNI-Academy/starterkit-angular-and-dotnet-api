@@ -1,0 +1,19 @@
+<div class="uploadfilecontainer as-absolute" 
+  (click)="onClick()" 
+  appDragDrop
+  (userIsDragging)="visible = $event"
+  (fileDropped)="uploadFile($event)">
+  <div class="content">
+    <mat-icon class="upload-icon">backup</mat-icon><br>
+    <span class="mat-display-2">{{'base.upload-file-here' | translate}}</span>
+  </div>
+  
+  <input #nativeInputFile hidden type="file" #fileInput (change)="uploadFile($any($event.target).files)">
+</div>
+
+<!-- <div  class="files-list" *ngFor="let file of files;let i= index">
+  <p> {{ file.name }} </p>
+  <button class="delete-file" (click)="deleteAttachment(i)">
+    <img src="../../assets/Recycle_Bin_Full.png">
+  </button>
+</div> -->

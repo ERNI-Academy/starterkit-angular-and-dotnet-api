@@ -1,0 +1,11 @@
+@import "variables.scss";
+
+.error {
+  color: $alarm-critical;
+}
+.info {
+  color: $alarm-info;
+}
+.warn {
+  color: $alarm-warning;
+}

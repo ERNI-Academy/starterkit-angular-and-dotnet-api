@@ -1,0 +1,59 @@
+{
+	"base": {
+		"action": {
+			"cancel": null,
+			"ok": null,
+			"save": null
+		},
+		"confirmation": {
+			"confirm-action": null,
+			"title": null
+		},
+		"home": "Inicio",
+		"logs": null,
+		"messages": {
+			"executed-successful": null,
+			"general-error": null,
+			"pending-changes-confirmation": null
+		},
+		"upload-file-here": null
+	},
+	"layout": {
+		"changePassword": null,
+		"login-action": null,
+		"login": {
+			"changePasswordSuccess": null,
+			"confirmPassword": null,
+			"errors": {
+				"mismatch": null
+			},
+			"newPassword": null,
+			"password": null,
+			"title": null,
+			"user": null
+		},
+		"logout": null,
+		"preferences": null
+	},
+	"logs": {
+		"acknowledge": null,
+		"acknowledge-all": "Marcar todos como leídos",
+		"actions": null,
+		"code": null,
+		"date-time": null,
+		"description": null,
+		"module": null,
+		"show-logs": null,
+		"title": null
+	},
+	"overview": {
+		"CVG-operation": "CVG operación",
+		"UVT-operation": "UVT operación",
+		"idle": "Inactivo",
+		"linked": "Linkado",
+		"ready": "Listo",
+		"resetting": "Reiniciando",
+		"searching": "Buscando",
+		"synching": "Sincronizando"
+	}
+}

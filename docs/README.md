@@ -1,8 +1,3 @@
-# About StarterKitAngularAndDotnetApi
-
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 ## **Introduction**
 
 This is a demo project which can be used as a quickstart in the technologies used or simply as a repository of code snippets that can be copy&pasted into another project.
@@ -125,31 +120,3 @@ npm run generate:i18n
 
 Open the API solution with Visual Studio 2022 minimum.
 The backend does not have "watch mode" so every time is modified the docker command must be re-run.
-
-## Contributing
-
-Please see our [Contribution Guide](CONTRIBUTING.md) to learn how to contribute.
-
-## License
-
-[MIT](LICENSE) © 2022 [ERNI - Swiss Software Engineering](https://www.betterask.erni)
-
-## Code of conduct
-
-Please see our [Code of Conduct](CODE_OF_CONDUCT.md)
-
-## Stats
-
-![Stats](https://repobeats.axiom.co/api/embed/6fecc103679d6da55ad1f2f30287eacf98892f79.svg "Repobeats analytics image")
-
-## Contact
-
-Erni_Services  - [@ERNI](https://twitter.com/ERNI) - esp-services@betterask.erni
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

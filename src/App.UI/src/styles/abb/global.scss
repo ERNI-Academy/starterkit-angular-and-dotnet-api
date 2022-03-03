@@ -1,0 +1,42 @@
+
+/****************************************************/
+/* Generic, minimal browser reset                   */
+/****************************************************/
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul,
+section {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+html {
+  font-family: 'ABBvoice', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.7;
+  height: 100%;
+  font-size: 100%;
+}

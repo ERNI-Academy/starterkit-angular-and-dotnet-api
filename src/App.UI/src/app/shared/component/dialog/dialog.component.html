@@ -1,0 +1,28 @@
+  <div class="dialog-top-container">
+    <div class="dialog-header">
+      <span
+        class="mat-subheading-2 dialog-title"
+      >{{data.title | translate}}</span>
+
+      <button mat-icon-button class="close-icon">
+        <mat-icon (click)="closeDialog()">close</mat-icon>
+      </button>
+      
+    </div>
+  
+    <mat-dialog-content class="dialog-content">
+      <ng-template #dialogContent></ng-template>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions class="dialog-actions">
+      <button mat-button
+        mat-raised-button
+        (click)="closeDialog()"
+      >{{data.buttonSecondaryText | translate}}</button>
+      <button mat-button
+        mat-raised-button
+        [color]="'primary'"
+        (click)="okButton()"
+      >{{data.buttonPrimaryText | translate}}</button>
+    </mat-dialog-actions>
+  </div>

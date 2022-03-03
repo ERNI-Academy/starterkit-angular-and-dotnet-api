@@ -1,0 +1,45 @@
+@use '@angular/material' as mat;
+@import './material/theme-variables.scss';
+
+/**
+  COLORS
+*/
+/// MATERIAL COLORS
+
+// main colors extracted from the Theme:
+// default: 500, lighter: 100, darker: 700
+$primary-color: mat.get-color-from-palette($app-primary-palette, default);
+// (should be equivalent to main blue: $app-blue-color: #36f;)
+
+// accent colors
+$accent-color: mat.get-color-from-palette($app-accent-palette, default);
+$accent-color-lighter: mat.get-color-from-palette($app-accent-palette, lighter);
+$accent-color-darker: mat.get-color-from-palette($app-accent-palette, darker);
+
+// warn colors
+$warn-color: mat.get-color-from-palette($app-warn-palette, default);
+
+$app-blue-color: #36f;
+
+$app-primary-blue: $app-blue-color;
+$gray-light: #6d696e;
+$app-input-label-gray: #696969;
+$app-light-gray: #c5c2c2;
+
+// alarm colors
+$alarm-clear: #2E8A2D;
+// $alarm-minor: #FFDD01;
+// $alarm-major: #FF7E01;
+$alarm-critical: #FF2401; //F03040: is the color of notifications error
+$alarm-warning: #d17103;
+$alarm-indeterminate: $gray-light;
+$alarm-info: $app-blue-color;
+
+// upload file placeHolder
+$upload-file-placeholder-background: #d17103;
+$upload-file-placeholder-border: #995303;
+
+/**
+  SIZES
+*/
+$input-max-width: 500px;

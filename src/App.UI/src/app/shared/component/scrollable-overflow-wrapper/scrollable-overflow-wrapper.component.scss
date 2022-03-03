@@ -1,0 +1,18 @@
+
+:host {
+  display: flex;
+  height: 100%;
+}
+
+/* this is the flex container that will take the rest of the height */
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  min-height: 0px; /* IMPORTANT: you need this for non-chrome browsers */
+}
+
+/* the container for our overflowed content */
+.overflow-container {
+  flex: 1;
+  overflow: auto;
+}

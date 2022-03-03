@@ -1,0 +1,26 @@
+FROM node:12
+
+WORKDIR /app
+
+# we use this initial state so it can be cached in Docker and when we change it does not do a "full npm install"
+COPY src/App.UI/package-cached.json ./package.json
+COPY src/App.UI/package-lock-cached.json ./package-lock.json
+RUN npm install
+
+COPY src/App.UI/package.json .
+COPY src/App.UI/package-lock.json .
+RUN npm install
+# copy the rest of files in the root (remember the 'src' folder is going to be mounted by a volume at runtime, for 'hot-reloading')
+COPY src/App.UI/*.* ./
+
+EXPOSE 4200
+
+# In development we don't use the same approach as in "production Dockerfile" (using the 'env.template.js' file) for 2 reasons:
+# 1. 'envsubst' command does not exists in this image. (this might be workaround by changing the image, installing it or using other npm command
+#    for the same purpose)
+# 2. We are working over the source code (through a volume; instead of a COPY). This means that when we write on a file like 'env.js' we are modifying
+#    the source code and it would appear in our "git changes" (this might be avoided putting the original 'env.js' in git ignore)
+
+# CMD ["/bin/sh",  "-c",  "envsubst < src/assets/env.template.js > src/assets/env.js && npm run start"]
+
+CMD ["/bin/sh",  "-c",  "npm run start"]

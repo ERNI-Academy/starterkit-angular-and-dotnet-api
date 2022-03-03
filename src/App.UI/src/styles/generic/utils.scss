@@ -1,0 +1,39 @@
+
+@import 'variables.scss';
+
+.error-icon {
+  color: $alarm-critical;
+}
+
+.app-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.main-content-wrapper {
+  height: 100%;
+  padding: 8px;
+  display: flex;
+
+  .main-content-wrapper-in {
+    overflow: auto;
+    padding: 25px;
+    background-color: white;
+    width: 100%;
+  }
+}
+
+.mh100 {
+  min-height: 100%;
+}
+
+.d-none {
+  display: none;
+}
+
+.content-vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

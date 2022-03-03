@@ -1,0 +1,38 @@
+<form 
+  [formGroup]="formGroup"
+  (ngSubmit)="onSubmit()">
+  
+  <app-input
+    *ngIf="!changePasswordMode"
+    [dataType]="'text'"
+    [label]="'layout.login.user' | translate"
+    [required]="true"
+    [formControlName]="'userName'"
+  ></app-input>
+
+  <app-input
+    [dataType]="'password'"
+    [label]="'layout.login.password' | translate"
+    [required]="true"
+    [formControlName]="'password'"
+  ></app-input>
+
+  <ng-container *ngIf="changePasswordMode">
+    
+    <app-input
+      [dataType]="'password'"
+      [label]="'layout.login.newPassword' | translate"
+      [required]="true"
+      formControlName="newPassword"
+    ></app-input>
+
+    <app-input
+      [dataType]="'password'"
+      [label]="'layout.login.confirmPassword' | translate"
+      [required]="true"
+      formControlName="confirmPassword"
+    ></app-input>
+  </ng-container>
+
+  <app-validation-error [message]="getGeneralError()"></app-validation-error>
+</form>

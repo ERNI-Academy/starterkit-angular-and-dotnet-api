@@ -1,0 +1,88 @@
+@import 'variables.scss';
+
+/***
+  TABS
+  These are group of styles basically to make the content of the tab to fill the remaining area
+*/
+app-tabs {
+  min-height: 100%;
+
+  abb-tabcontrol {
+    min-height: 100% !important;
+    &>div {
+      flex-grow: 1;
+    }
+
+    .tabs-content {
+      display: flex;
+
+      abb-tab {
+        min-height: 100%;
+
+        &.active-tab {
+          width: 100%;
+        }
+
+        & > div {
+          min-height: 100%;
+        }
+
+        .app-tab-content {
+          min-height: 100%;
+          display: flex;
+
+          & > router-outlet {
+            // so it does not get the flex-grow: 1; property of '& > *'
+            display: none;
+          }
+
+          // this is the child sibling of tab content 'router-outlet' (also the parent of every component inside the tab)
+          & > * {
+            flex-grow: 1;
+          }
+        }
+
+
+        
+      }
+    }
+  }
+  
+}
+
+
+/***
+  Dropdown
+*/
+
+abb-dropdown, abb-form-dropdown {
+  // set background to white when the background is not (like the inputs)
+  // otherwise the inputs look white while the dropdown looks gray in a gray background
+  ng-select {
+    background: white;
+  }
+}
+
+
+
+/***
+  Snackbar
+*/
+
+.custom-snackbar {
+  &.mat-snack-bar-container{
+    // reset original margin. Remove the bottom margin which makes unclickable some elements like tabs, close to the notification.
+    margin: 0;
+    margin-top: 24px;
+  }
+
+  &.snackbar-success {
+    background-color: $alarm-clear;
+    color: white;
+  }
+
+  &.snackbar-error {
+    background-color: $warn-color;
+    color: white;
+  }
+}

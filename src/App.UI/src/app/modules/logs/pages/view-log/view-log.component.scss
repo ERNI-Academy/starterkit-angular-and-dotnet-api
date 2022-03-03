@@ -1,0 +1,27 @@
+
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+.main-content-wrapper-in {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  .description-content {
+    flex-grow: 1;
+    margin-top: 40px;
+  }
+}
+
+
+.main-button {
+  float: right;
+}

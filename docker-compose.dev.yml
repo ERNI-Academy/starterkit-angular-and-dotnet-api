@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  app.gateway:
+    # build:
+      # dockerfile: ./src/gateway/Dockerfile.dev
+    environment: 
+      - WEB_APP_PORT=4200 # webpack server hot reload
+  app.api:
+    build:
+      target: dev
+    environment: 
+      - LOG_LEVEL=1       
+      - OPCUA_MODE=0
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RESET_DATABASE=true
+    
+  app.ui:
+    build:
+      dockerfile: ./src/App.UI/Dockerfile.dev
+    ports:
+      - '4200:4200'
+    volumes: # For webpack dev server to use our local files
+      - ./src/App.UI/src:/app/src
+    environment: 
+      - NODE_ENV=development

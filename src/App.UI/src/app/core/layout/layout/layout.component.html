@@ -1,0 +1,43 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+    </button>
+    <h1>Docker App</h1>
+    <span class="menu-spacer"></span>
+    <div>
+      <a mat-button [routerLink]="routes.ROBOT.BASE" routerLinkActive="mat-button-toggle-checked"> {{'base.home' | translate}} </a>
+      <a mat-button [routerLink]="routes.LOGS.BASE" routerLinkActive="mat-button-toggle-checked"> {{'base.logs' | translate}} </a>
+      <a mat-button [routerLink]="'/control'" routerLinkActive="mat-button-toggle-checked"> Control </a>
+    </div>
+    <span class="example-spacer"></span>
+    <!-- <button mat-icon-button class="example-icon favorite-icon">
+      <mat-icon>favorite</mat-icon>
+    </button> -->
+    <app-language-selector></app-language-selector>
+    <app-user-selector></app-user-selector>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row>
+    <span style="font-size: 12px;">Bootstrap Web App with Docker, Angular, netCore API and SQLite stack</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-nav-list>
+
+      <a mat-list-item [routerLink]="routes.ROBOT.BASE"> {{'base.home' | translate}} </a>
+      <a mat-list-item [routerLink]="routes.LOGS.BASE"> {{'base.logs' | translate}} </a>
+      <a mat-list-item [routerLink]="'/control'"> Control </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="main-content-wrapper">
+
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

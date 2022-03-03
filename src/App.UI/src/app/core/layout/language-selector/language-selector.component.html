@@ -1,0 +1,15 @@
+
+<button mat-button
+[matMenuTriggerFor]="menu"
+>
+  <img src="{{selectedFlagSrc()}}">
+</button>
+<mat-menu #menu="matMenu" style="display: none">
+  <button
+    *ngFor="let flag of notSelectedFlags"
+    mat-menu-item
+    (click)="selectFlag(flag)" 
+  >
+    <img src="{{flagSrc(flag)}}">
+  </button>
+</mat-menu>

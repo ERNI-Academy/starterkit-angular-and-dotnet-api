@@ -1,0 +1,26 @@
+
+<ng-container [formGroup]="formGroup">
+  <mat-form-field class="full-width">
+    <mat-label *ngIf="label">{{label}}</mat-label>
+    <input 
+      matInput
+      [type]="dataType"
+      [required]="required"
+      [formControlName]="'customInput'"
+      [step]="calculatedStep"
+      [placeholder]="calculatedPlaceHolder"
+      [min]="min?.toString()"
+      [max]="max?.toString()"
+    >
+    <mat-error *ngIf="errorValidationResult && !errorValidationResult.valid">
+      {{errorValidationResult.text}}
+    </mat-error>
+  </mat-form-field>
+</ng-container>
+
+<!-- min?.toString() this is needed for the '0' case which is not well treated as a number internally -->
+<!-- Numberic Directive (seems its not needed with the 'step' attribute) -->
+<!-- appNumeric
+    [appNumericEnabled]="dataType == 'number'"
+    [decimals]="decimals"
+    [appNumericTargetNativeElement]="targetInputNativeElement" -->

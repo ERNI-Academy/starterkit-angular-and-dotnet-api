@@ -1,0 +1,15 @@
+<p>menu works!</p>
+
+<div class="main-container">
+  <div class="selected-item" (click)="toggleMenu()">
+    {{selectedItem?.text}}
+  </div>
+  
+  <div class="list-container light left" [ngStyle]="{'display':showMenu ? 'block' : 'none'}">
+    <ul>
+      <li *ngFor="let item of items" value="{{item.value}}">
+        {{ item.text }}
+      </li>
+    </ul>
+  </div>
+</div>

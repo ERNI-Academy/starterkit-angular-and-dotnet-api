@@ -1,0 +1,53 @@
+@import 'variables.scss';
+
+
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+.main-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+}
+.centered-container {
+  margin: 0;
+  display: flex;
+}
+
+.status-blocks {
+  margin-left: 30px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.overview-image {
+  // we want the image to compress horitzontally, not in height
+  min-height: 550px;
+}
+
+
+.alarm {
+  outline: 4px solid;
+  outline-offset: -4px;
+
+  &.clear {
+    outline-color: $alarm-clear;
+  }
+  &.critical {
+    outline-color: $alarm-critical;
+  }
+  &.warning {
+    outline-color: $alarm-warning;
+  }
+  &.indeterminate {
+    outline-color: $alarm-indeterminate;
+  }
+}

@@ -1,0 +1,47 @@
+<div class="main-content-wrapper" *ngIf="logId$ | async as logId">
+  <div class="main-content-wrapper-in" *ngIf="selectedLog">
+    <app-logs-icon-severity
+      [severity]="selectedLog.severity"
+      [sizeClass]="'large'"
+    ></app-logs-icon-severity>
+
+    <div class="main-content">
+      <div class="top-content">
+        <div fxFlex="50%">
+          <p class="mat-subheading-1">{{'logs.title' | translate}}</p>
+          <p>{{selectedLog.title}}</p>
+          <p class="mat-subheading-1">{{'logs.code' | translate}}</p>
+          <p>{{selectedLog.code}}</p>
+        </div>
+        <div fxFlex="50%">
+          <p class="mat-subheading-1">{{'logs.date-time' | translate}}</p>
+          <p>{{selectedLog.time | date}}</p>
+          <p class="mat-subheading-1">{{'logs.module' | translate}}</p>
+          <p>{{selectedLog.module}}</p>
+        </div>
+      </div>
+      
+      <div class="description-content">
+        <p class="mat-subheading-1">{{'logs.description' | translate}}</p>
+        <p>{{selectedLog.description}}</p>
+        <p class="mat-subheading-1">{{'logs.actions' | translate}}</p>
+        <p>{{selectedLog.actions}}</p>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button mat-button
+        mat-raised-button
+        (click)="goToLogs()"
+      >{{'logs.show-logs' | translate}}</button>
+      <button mat-button
+        mat-raised-button
+        [color]="'primary'"
+        *ngIf="selectedLog?.status === 'pending'"
+        class="main-button"
+        (click)="acknowledge(logId)"
+      >{{'logs.acknowledge' | translate}}</button>
+    </div>
+  </div>
+</div>
+

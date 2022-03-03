@@ -1,0 +1,13 @@
+
+# Run system in dev mode
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build app.gateway app.api
+
+# It shows the 'merged' compose files
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml config
+
+# Runs bash in a container (useful to debug image build)
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml run app.ui bash
+
+#Remove all containers in the system
+docker system prune --volumes

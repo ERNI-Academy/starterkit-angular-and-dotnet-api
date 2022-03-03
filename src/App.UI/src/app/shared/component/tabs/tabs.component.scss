@@ -1,0 +1,35 @@
+
+@import 'variables.scss';
+
+
+.nav-bar-main {
+  height: 100%;
+  // margin: -12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-bar-content {
+  height: 100%;
+  padding: 24px;
+  background-color: $app-light-gray;
+  flex: 1;
+  overflow: auto;
+}
+
+.mat-tab-nav-bar {
+  border-bottom: 0;
+  padding-top: 12px;
+}
+
+.mat-tab-label-active {
+  opacity: 1;
+}
+
+.mat-tab-link {
+  height: 30px;
+}
+
+.tab-link-label{
+  margin-bottom: 8px;
+}

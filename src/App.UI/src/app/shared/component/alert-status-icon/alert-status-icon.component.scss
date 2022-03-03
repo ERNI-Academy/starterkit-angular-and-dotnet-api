@@ -1,0 +1,29 @@
+@import 'variables.scss';
+
+.alarm-icon {
+  height: 10px;
+  width: 10px;
+  background-color: $gray-light;
+  border-radius: 50%;
+  display: inline-block;
+
+  &.clear {
+    background-color: $alarm-clear;
+  }
+  // &.minor {
+  //   background-color: $alarm-minor;
+  // }
+  // &.major {
+  //   background-color: $alarm-major;
+  // }
+  &.critical {
+    background-color: $alarm-critical;
+  }
+  &.warning {
+    background-color: $alarm-warning;
+  }
+  &.indeterminate {
+    background-color: $alarm-indeterminate;
+  }
+}
+

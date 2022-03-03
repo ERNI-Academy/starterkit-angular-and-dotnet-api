@@ -1,0 +1,3191 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "HMI.API",
+    "description": "This document describe the endpoints to use in the UI to connect with the entire CVS system.",
+    "version": "v1"
+  },
+  "paths": {
+    "/auth/authenticate": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Allows a user to authenticate into the API.",
+        "description": "Sample request:\r\n\r\n    POST /authenticate\r\n    {\r\n       \"username\": \"oper\",\r\n       \"password\": \"Test123.\"\r\n    }",
+        "requestBody": {
+          "description": "Information of the user who wants to authenticate.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the user information and the JWT token to use in the authorized endpoints.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the username or password is incorrect.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh the token for the current user.",
+        "responses": {
+          "200": {
+            "description": "Returns the user information and the JWT token to use in the authorized endpoints",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/revoke-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Revoke the refresh token for the current user, acts like logout.",
+        "description": "Sample request 1:\r\n\r\n    POST /revoke-token\r\n    {\r\n       \"token\": \"THIS-SHOULD-BE-THE-REFRESH-TOKEN-FROM-THE-COOKIE\"\r\n    }\r\n\r\nSample request 2:\r\n\r\n    POST /revoke-token\r\n    {\r\n    }",
+        "requestBody": {
+          "description": "The refresh token that should be revoked. if it's not specified, it will automatically look for the \"refresh-token\" cookie in the request.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "If the token was revoked."
+          },
+          "400": {
+            "description": "If the token is empty in the cookie and in the request message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dev/signalR-log-notification": {
+      "post": {
+        "tags": [
+          "Developer"
+        ],
+        "summary": "Send a SignalR notification for Logs.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/dev/signalR-any-notification": {
+      "post": {
+        "tags": [
+          "Developer"
+        ],
+        "summary": "The SignalR any notification.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The type.",
+            "schema": {
+              "$ref": "#/components/schemas/NotificationType"
+            }
+          },
+          {
+            "name": "payload",
+            "in": "query",
+            "description": "The payload.",
+            "schema": {
+              "type": "string",
+              "description": "The payload.",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/items": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Get the list of the items.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items/{itemName}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Get a item by id.",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "The item name.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The item name.",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Create a new item.",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "The item name.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The item name.",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Delete an item.",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "The item name.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The item name.",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items/tag/{itemName}/{tagLabel}": {
+      "post": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Create a new tag.",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "The item name.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The item name.",
+              "nullable": true
+            }
+          },
+          {
+            "name": "tagLabel",
+            "in": "path",
+            "description": "The tag label.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The tag label.",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/language": {
+      "get": {
+        "tags": [
+          "Language"
+        ],
+        "summary": "The get all.",
+        "responses": {
+          "200": {
+            "description": "Returns list of all available languages for the UI.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Language"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/language/current-active": {
+      "get": {
+        "tags": [
+          "Language"
+        ],
+        "summary": "The current active language.",
+        "responses": {
+          "200": {
+            "description": "Returns list of all available languages for the UI.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/language/current-active/{id}": {
+      "put": {
+        "tags": [
+          "Language"
+        ],
+        "summary": "The change current active.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns list of all available languages for the UI.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the language for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logs": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Get all logs available.",
+        "parameters": [
+          {
+            "name": "Type",
+            "in": "query",
+            "description": "Gets or sets the severity. \r\nOptional, comma-separated multiple severity levels.",
+            "schema": {
+              "$ref": "#/components/schemas/LogType"
+            }
+          },
+          {
+            "name": "From",
+            "in": "query",
+            "description": "Gets or sets the from.\r\nOptional, starting date",
+            "schema": {
+              "type": "string",
+              "description": "Gets or sets the from.\r\nOptional, starting date",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "To",
+            "in": "query",
+            "description": "Gets or sets the to.\r\nOptional, ending date.",
+            "schema": {
+              "type": "string",
+              "description": "Gets or sets the to.\r\nOptional, ending date.",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "IsAcknowledged",
+            "in": "query",
+            "description": "Gets or sets a value indicating whether is acknowledged.",
+            "schema": {
+              "type": "boolean",
+              "description": "Gets or sets a value indicating whether is acknowledged.",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Code",
+            "in": "query",
+            "description": "Gets or sets the code.",
+            "schema": {
+              "type": "string",
+              "description": "Gets or sets the code.",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Module",
+            "in": "query",
+            "description": "Gets or sets the module.",
+            "schema": {
+              "type": "string",
+              "description": "Gets or sets the module.",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Order",
+            "in": "query",
+            "description": "Gets or sets the order.",
+            "schema": {
+              "$ref": "#/components/schemas/Order"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "description": "Gets or sets the page.",
+            "schema": {
+              "type": "integer",
+              "description": "Gets or sets the page.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "description": "Gets or sets the page size.",
+            "schema": {
+              "type": "integer",
+              "description": "Gets or sets the page size.",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns list of all available logs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogPagedResultResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logs/{id}": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Get a log by its identifier.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The log identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The log identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The log details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Log"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the log for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logs/set-ack/{id}": {
+      "post": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Set the acknowledge status for a log.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The log identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The log identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "If the request was successfully processed."
+          },
+          "404": {
+            "description": "If the log for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logs/set-ack-all": {
+      "post": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Set the acknowledge status for all logs.",
+        "responses": {
+          "202": {
+            "description": "If the request was successfully processed."
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/module": {
+      "get": {
+        "tags": [
+          "Module"
+        ],
+        "summary": "Get all modules available.",
+        "responses": {
+          "200": {
+            "description": "Returns the all modules available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Module"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/module/{moduleId}": {
+      "get": {
+        "tags": [
+          "Module"
+        ],
+        "summary": "The get a module by moduleId.",
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "path",
+            "description": "The module identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The module identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the data for the specified module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Module"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the module for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/module/{moduleId}/status/current-operation": {
+      "get": {
+        "tags": [
+          "Module"
+        ],
+        "summary": "Get the current operation estatus for the specified module.",
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "path",
+            "description": "The module moduleId.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The module moduleId.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the current operation status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentOperationResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/module/{moduleId}/status/process": {
+      "get": {
+        "tags": [
+          "Module"
+        ],
+        "summary": "Get process status for the module.",
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "path",
+            "description": "The module identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The module identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the process status for the module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessStatusResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/module/{moduleId}/status/hardware": {
+      "get": {
+        "tags": [
+          "Module"
+        ],
+        "summary": "Get the hardware status.",
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "path",
+            "description": "The module identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The module identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the hardware status for the module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HardwareStatusResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensor": {
+      "get": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Get all sensors for an specified module.",
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "query",
+            "description": "The module unique identifyer.",
+            "schema": {
+              "type": "integer",
+              "description": "The module unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the sensor for the module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SensorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Create a new sensor for the specified module.",
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "query",
+            "description": "The module unique identifyer.",
+            "schema": {
+              "type": "integer",
+              "description": "The module unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          },
+          {
+            "name": "sensorName",
+            "in": "query",
+            "description": "The sensor name.",
+            "schema": {
+              "type": "string",
+              "description": "The sensor name.",
+              "nullable": true,
+              "example": "Test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the sensor for the module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SensorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensor/{sensorId}": {
+      "get": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Get a sensor for an specified id.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the sensor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SensorResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Delete the specifed sensor.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Returns the sensor for the module."
+          }
+        }
+      }
+    },
+    "/sensor/{sensorId}/config": {
+      "get": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Get configuration for the specified sensor.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the sensor for the module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Saves the configuration for a specified sensor.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The new configuration request.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConfigRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConfigRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConfigRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConfigRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "If the sensor configuration was saved."
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensor/{sensorId}/extrinsic-calibration": {
+      "get": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "The get extrinsic calibration.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the sensor for the module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtrinsicCalibResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "The set extrinsic calibration.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The request.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExtrCalibRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExtrCalibRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExtrCalibRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExtrCalibRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "If the sensor configuration was saved."
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensor/{sensorId}/reference": {
+      "get": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Get the current calibration reference.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the sensor for the module.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Send a request to vision module to validate and update the new reference.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The request.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReferenceRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReferenceRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReferenceRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReferenceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "If the calibration is valid and updated."
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Send a request to vision module to clear the reference calibration configured for the sensor.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "If the reference was cleared."
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensor/{sensorId}/check-calibration": {
+      "post": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "Send a request to vision to provide feedback of the current calibration.",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "If the calibration is valid and updated."
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensor/{sensorId}/recalculate-calibration": {
+      "post": {
+        "tags": [
+          "Sensor"
+        ],
+        "summary": "The recalculate calibration. TODO: not sure about what does this method",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "The sensor unique identifyer.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The sensor unique identifyer.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "If the calibration is valid and updated."
+          },
+          "404": {
+            "description": "If the sensor for the specified id does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/streaming/{name}": {
+      "get": {
+        "tags": [
+          "Streaming"
+        ],
+        "summary": "Get the streamming file.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "The name.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The name.",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users registered. Only users with admin role can perform this action.",
+        "responses": {
+          "200": {
+            "description": "Returns list of all users registered and its detailed information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Register a new user into the system, only users with admin role can create new users.",
+        "description": "Sample request:\r\n\r\n    POST /users/\r\n    {\r\n        \"username\": \"dojo\",\r\n        \"firstName\": \"John\",\r\n        \"lastName\": \"Doe\",\r\n        \"role\":  \"Operator\",\r\n        \"password\": \"Test123.\"\r\n    }",
+        "requestBody": {
+          "description": "The user information to create.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "If the user was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the username its already registered.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get the user information by its identifier. Only authenticated users can perform this action.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The user identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "he detailed information about the specified user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the user id was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update the information of a specified user. Only authenticated users can perform this action.",
+        "description": "Sample request:\r\n\r\n    PUT /users/{id}\r\n    {\r\n        \"username\": \"dojo\",\r\n        \"firstName\": \"John\",\r\n        \"lastName\": \"Doe\",\r\n        \"role\": \"Operator\",\r\n        \"password\": \"Test123.\"\r\n    }",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The user identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The user information to update.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "If the user was update successfully."
+          },
+          "400": {
+            "description": "If the username its already registered.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If is changing the username for a Default user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If user id was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete the current logged user or if the current user has admin role, it deletes the specified user.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user identifier.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "The user identifier.",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "If the user was deleted successfully."
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the user id was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If deleting default users or a different user than the logged.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/reset-password": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Reset the user password. Only authenticated users can perform this action.",
+        "description": "Sample request:\r\n\r\n    POST /users/reset-password\r\n    {\r\n        \"oldPassword\": \"Test123.\"\r\n        \"newPassword\": \"NewPassword\"\r\n    }",
+        "requestBody": {
+          "description": "The passeord reset data.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "If password was update successfully."
+          },
+          "400": {
+            "description": "If old password does not match.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If user id was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/reset-password-admin": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Reset the user password, only users with admin role can create new users.",
+        "description": "Sample request:\r\n\r\n    POST /users/reset-password\r\n    {\r\n        \"username\": \"dojo\",\r\n        \"newPassword\": \"NewPassword\"\r\n    }",
+        "requestBody": {
+          "description": "The passeord reset data.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordAdminRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordAdminRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordAdminRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "If the user was update successfully."
+          },
+          "401": {
+            "description": "If the requester user is unauthorized to perform this action.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the user name  was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthenticateRequest": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Gets or sets the username of the user who wants to be authenticated."
+          },
+          "password": {
+            "type": "string",
+            "description": "Gets or sets the password of the user who wants to be authenticated."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Request to authenticate user into the web Api."
+      },
+      "Role": {
+        "enum": [
+          "Operator",
+          "Maintenance",
+          "Commissioning",
+          "Admin"
+        ],
+        "type": "string",
+        "description": "The roles a user can have."
+      },
+      "AuthenticateResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string",
+            "description": "Gets or sets the username.",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Gets or sets the first name.",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Gets or sets the last name.",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "jwtToken": {
+            "type": "string",
+            "description": "Gets or sets the jwt token.",
+            "nullable": true
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Gets or sets the refresh token.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The authenticate response."
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Gets or sets the error message reported by the api when performing an action.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Error response."
+      },
+      "RevokeTokenRequest": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Gets or sets the token.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The revoke token request."
+      },
+      "NotificationType": {
+        "enum": [
+          "Logs",
+          "ModuleStatus"
+        ],
+        "type": "string"
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Gets the label.",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "description": "Gets or sets the count.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The tag."
+      },
+      "Item": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Gets the name.",
+            "nullable": true
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            },
+            "description": "The tags.",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The item."
+      },
+      "Language": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the name.",
+            "nullable": true
+          },
+          "localization": {
+            "type": "string",
+            "description": "Gets or sets the localization.",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Gets or sets a value indicating whether the language is currently active in the UI."
+          }
+        },
+        "additionalProperties": false,
+        "description": "The language."
+      },
+      "LogType": {
+        "enum": [
+          "Info",
+          "Warning",
+          "Error"
+        ],
+        "type": "string",
+        "description": "The log type."
+      },
+      "Order": {
+        "enum": [
+          "Ascending",
+          "Descending"
+        ],
+        "type": "string",
+        "description": "The order."
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "description": "Gets or sets the time.",
+            "format": "date-time"
+          },
+          "type": {
+            "$ref": "#/components/schemas/LogType"
+          },
+          "isAcknowledged": {
+            "type": "boolean",
+            "description": "Gets or sets a value indicating whether is acknowledged."
+          },
+          "code": {
+            "type": "string",
+            "description": "Gets or sets the code.",
+            "nullable": true
+          },
+          "module": {
+            "type": "string",
+            "description": "Gets or sets the module.",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "description": "Gets or sets the title.",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Gets or sets the description.",
+            "nullable": true
+          },
+          "actions": {
+            "type": "string",
+            "description": "Gets or sets the actions.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The log."
+      },
+      "LogPagedResultResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "description": "Gets or sets  the total count.",
+            "format": "int32"
+          },
+          "elements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Log"
+            },
+            "description": "Gets or sets the elements.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The paged result response."
+      },
+      "Module": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the name.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The module."
+      },
+      "OperationStatus": {
+        "enum": [
+          "NotStarted",
+          "Done",
+          "InProgress",
+          "Stopped",
+          "Failed"
+        ],
+        "type": "string",
+        "description": "The operation status."
+      },
+      "CurrentOperationResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the name.",
+            "nullable": true
+          },
+          "idle": {
+            "$ref": "#/components/schemas/OperationStatus"
+          },
+          "ready": {
+            "$ref": "#/components/schemas/OperationStatus"
+          },
+          "searching": {
+            "$ref": "#/components/schemas/OperationStatus"
+          },
+          "synching": {
+            "$ref": "#/components/schemas/OperationStatus"
+          },
+          "linked": {
+            "$ref": "#/components/schemas/OperationStatus"
+          },
+          "resetting": {
+            "$ref": "#/components/schemas/OperationStatus"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The current operation response."
+      },
+      "FeatureMatchingState": {
+        "enum": [
+          "Lost",
+          "LowQuality",
+          "TrackedCorrectly"
+        ],
+        "type": "string",
+        "description": "The matching status for each module camera."
+      },
+      "ProcessStatusResponse": {
+        "type": "object",
+        "properties": {
+          "nbrCycles": {
+            "type": "integer",
+            "description": "Gets or sets the number of cycles.",
+            "format": "int32"
+          },
+          "step": {
+            "type": "integer",
+            "description": "Gets or sets the current Step.",
+            "format": "int32"
+          },
+          "tError": {
+            "type": "number",
+            "description": "Gets or sets the translation error in mm.",
+            "format": "float"
+          },
+          "rError": {
+            "type": "integer",
+            "description": "Gets or sets the rotation error in degrees.",
+            "format": "int32"
+          },
+          "matching": {
+            "$ref": "#/components/schemas/FeatureMatchingState"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The process status response."
+      },
+      "HardwareStatusResponse": {
+        "type": "object",
+        "properties": {
+          "camera": {
+            "$ref": "#/components/schemas/OperationStatus"
+          },
+          "lights": {
+            "$ref": "#/components/schemas/OperationStatus"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The hardware status response."
+      },
+      "SensorStatus": {
+        "enum": [
+          "Unknown",
+          "Connected",
+          "Failed"
+        ],
+        "type": "string",
+        "description": "The sensor status."
+      },
+      "SensorResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the name.",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/SensorStatus"
+          },
+          "moduleId": {
+            "type": "integer",
+            "description": "Gets or sets the module id.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The sensor response."
+      },
+      "ConfigResponse": {
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "integer",
+            "description": "Gets or sets the module id.",
+            "format": "int32"
+          },
+          "sensorId": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "sensorName": {
+            "type": "string",
+            "description": "Gets or sets the label.",
+            "nullable": true
+          },
+          "serialNumber": {
+            "type": "string",
+            "description": "Gets or sets the serial number.",
+            "nullable": true
+          },
+          "ip": {
+            "type": "string",
+            "description": "Gets or sets the ip.",
+            "nullable": true
+          },
+          "fx": {
+            "type": "number",
+            "description": "Gets or sets the fx.",
+            "format": "float"
+          },
+          "fy": {
+            "type": "number",
+            "description": "Gets or sets the fy.",
+            "format": "float"
+          },
+          "cx": {
+            "type": "number",
+            "description": "Gets or sets the cx.",
+            "format": "float"
+          },
+          "cy": {
+            "type": "number",
+            "description": "Gets or sets the cy.",
+            "format": "float"
+          },
+          "k1": {
+            "type": "number",
+            "description": "Gets or sets the k 1.",
+            "format": "float"
+          },
+          "k2": {
+            "type": "number",
+            "description": "Gets or sets the k 2.",
+            "format": "float"
+          },
+          "k3": {
+            "type": "number",
+            "description": "Gets or sets the k 3.",
+            "format": "float"
+          },
+          "k4": {
+            "type": "number",
+            "description": "Gets or sets the k 4.",
+            "format": "float"
+          },
+          "k5": {
+            "type": "number",
+            "description": "Gets or sets the k 5.",
+            "format": "float"
+          },
+          "width": {
+            "type": "number",
+            "description": "Gets or sets the width.",
+            "format": "float"
+          },
+          "height": {
+            "type": "number",
+            "description": "Gets or sets the height.",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The config response."
+      },
+      "UpdateConfigRequest": {
+        "type": "object",
+        "properties": {
+          "sensorName": {
+            "type": "string",
+            "description": "Gets or sets the label.",
+            "nullable": true
+          },
+          "serialNumber": {
+            "type": "string",
+            "description": "Gets or sets the serial number.",
+            "nullable": true
+          },
+          "ip": {
+            "type": "string",
+            "description": "Gets or sets the ip.",
+            "nullable": true
+          },
+          "fx": {
+            "type": "number",
+            "description": "Gets or sets the fx.",
+            "format": "float",
+            "nullable": true
+          },
+          "fy": {
+            "type": "number",
+            "description": "Gets or sets the fy.",
+            "format": "float",
+            "nullable": true
+          },
+          "cx": {
+            "type": "number",
+            "description": "Gets or sets the cx.",
+            "format": "float",
+            "nullable": true
+          },
+          "cy": {
+            "type": "number",
+            "description": "Gets or sets the cy.",
+            "format": "float",
+            "nullable": true
+          },
+          "k1": {
+            "type": "number",
+            "description": "Gets or sets the k 1.",
+            "format": "float",
+            "nullable": true
+          },
+          "k2": {
+            "type": "number",
+            "description": "Gets or sets the k 2.",
+            "format": "float",
+            "nullable": true
+          },
+          "k3": {
+            "type": "number",
+            "description": "Gets or sets the k 3.",
+            "format": "float",
+            "nullable": true
+          },
+          "k4": {
+            "type": "number",
+            "description": "Gets or sets the k 4.",
+            "format": "float",
+            "nullable": true
+          },
+          "k5": {
+            "type": "number",
+            "description": "Gets or sets the k 5.",
+            "format": "float",
+            "nullable": true
+          },
+          "width": {
+            "type": "number",
+            "description": "Gets or sets the width.",
+            "format": "float",
+            "nullable": true
+          },
+          "height": {
+            "type": "number",
+            "description": "Gets or sets the height.",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The update config request."
+      },
+      "ExtrinsicCalibResponse": {
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "integer",
+            "description": "Gets or sets the module id.",
+            "format": "int32"
+          },
+          "sensorId": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "x": {
+            "type": "number",
+            "description": "Gets or sets the x.",
+            "format": "float"
+          },
+          "y": {
+            "type": "number",
+            "description": "Gets or sets the y.",
+            "format": "float"
+          },
+          "z": {
+            "type": "number",
+            "description": "Gets or sets the z.",
+            "format": "float"
+          },
+          "qw": {
+            "type": "number",
+            "description": "Gets or sets the qw.",
+            "format": "float"
+          },
+          "qx": {
+            "type": "number",
+            "description": "Gets or sets the qx.",
+            "format": "float"
+          },
+          "qy": {
+            "type": "number",
+            "description": "Gets or sets the qy.",
+            "format": "float"
+          },
+          "qz": {
+            "type": "number",
+            "description": "Gets or sets the qz.",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The sensor extr calib response."
+      },
+      "UpdateExtrCalibRequest": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "description": "Gets or sets the x.",
+            "format": "float",
+            "nullable": true
+          },
+          "y": {
+            "type": "number",
+            "description": "Gets or sets the y.",
+            "format": "float",
+            "nullable": true
+          },
+          "z": {
+            "type": "number",
+            "description": "Gets or sets the z.",
+            "format": "float",
+            "nullable": true
+          },
+          "qw": {
+            "type": "number",
+            "description": "Gets or sets the qw.",
+            "format": "float",
+            "nullable": true
+          },
+          "qx": {
+            "type": "number",
+            "description": "Gets or sets the qx.",
+            "format": "float",
+            "nullable": true
+          },
+          "qy": {
+            "type": "number",
+            "description": "Gets or sets the qy.",
+            "format": "float",
+            "nullable": true
+          },
+          "qz": {
+            "type": "number",
+            "description": "Gets or sets the qz.",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The update extr calib request."
+      },
+      "ReferenceResponse": {
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "integer",
+            "description": "Gets or sets the module id.",
+            "format": "int32"
+          },
+          "sensorId": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "exposureTime": {
+            "type": "integer",
+            "description": "Gets or sets the exposure time.",
+            "format": "int32",
+            "nullable": true
+          },
+          "chessboardSizeHigh": {
+            "type": "integer",
+            "description": "Gets or sets the chessboard size high.",
+            "format": "int32",
+            "nullable": true
+          },
+          "chessboardSizeWidth": {
+            "type": "integer",
+            "description": "Gets or sets the chessboard size width.",
+            "format": "int32",
+            "nullable": true
+          },
+          "squareSize": {
+            "type": "number",
+            "description": "Gets or sets the square size.",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The reference response."
+      },
+      "UpdateReferenceRequest": {
+        "type": "object",
+        "properties": {
+          "exposureTime": {
+            "type": "integer",
+            "description": "Gets or sets the exposure time.",
+            "format": "int32",
+            "nullable": true
+          },
+          "chessboardSizeHigh": {
+            "type": "integer",
+            "description": "Gets or sets the chessboard size high.",
+            "format": "int32",
+            "nullable": true
+          },
+          "chessboardSizeWidth": {
+            "type": "integer",
+            "description": "Gets or sets the chessboard size width.",
+            "format": "int32",
+            "nullable": true
+          },
+          "squareSize": {
+            "type": "number",
+            "description": "Gets or sets the square size.",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The update reference request."
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Gets or sets the id.",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Gets or sets the first name.",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Gets or sets the last name.",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "description": "Gets or sets the role.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The user response."
+      },
+      "CreateUserRequest": {
+        "required": [
+          "firstName",
+          "lastName",
+          "password",
+          "role",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Gets or sets the username."
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Gets or sets the first name."
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Gets or sets the last name."
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "password": {
+            "minLength": 6,
+            "type": "string",
+            "description": "Gets or sets the password.",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The create user request."
+      },
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Gets or sets the username.",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Gets or sets the first name.",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Gets or sets the last name.",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "password": {
+            "minLength": 6,
+            "type": "string",
+            "description": "Gets or sets the password.",
+            "format": "password",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The update user request."
+      },
+      "ResetPasswordRequest": {
+        "required": [
+          "newPassword",
+          "oldPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "description": "Gets or sets the old password.",
+            "format": "password"
+          },
+          "newPassword": {
+            "minLength": 6,
+            "type": "string",
+            "description": "Gets or sets the new password.",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The reset password request."
+      },
+      "ResetPasswordAdminRequest": {
+        "required": [
+          "newPassword",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Gets or sets the username."
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "Gets or sets the new password.",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The reset password admin request."
+      },
+      "NotificationModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/NotificationType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NotificationModels": {
+        "type": "object",
+        "properties": {
+          "notificationModel": {
+            "$ref": "#/components/schemas/NotificationModel"
+          },
+          "notificationLogPayload": {
+            "$ref": "#/components/schemas/Log"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT containing userid claim",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

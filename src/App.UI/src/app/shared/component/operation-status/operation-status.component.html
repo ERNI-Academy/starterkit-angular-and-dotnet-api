@@ -1,0 +1,45 @@
+
+<mat-card>
+  <mat-card-header>
+    <!-- <div mat-card-avatar class="example-header-image"></div> -->
+    <mat-card-title class="app-ellipsis">{{title | translate}}</mat-card-title>
+    <mat-card-subtitle class="app-ellipsis">{{operationName}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <!-- <p>
+      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+      bred for hunting.
+    </p> -->
+    <div class="container">
+      <ul>
+        <li>
+          <app-alert-status-icon [status]="states.idle"></app-alert-status-icon>
+          {{'overview.idle' | translate}}
+        </li>
+        <li>
+          <app-alert-status-icon [status]="states.ready"></app-alert-status-icon>
+          {{'overview.ready' | translate}}
+        </li>
+        <li>
+          <app-alert-status-icon [status]="states.search"></app-alert-status-icon>
+          {{'overview.searching' | translate}}
+        </li>
+        <li>
+          <app-alert-status-icon [status]="states.sync"></app-alert-status-icon>
+          {{'overview.synching' | translate}}
+        </li>
+        <li>
+          <app-alert-status-icon [status]="states.link"></app-alert-status-icon>
+          {{'overview.linked' | translate}}
+        </li>
+        <li>
+          <app-alert-status-icon [status]="states.reset"></app-alert-status-icon>
+          {{'overview.resetting' | translate}}
+        </li>
+      </ul>
+    </div>
+  </mat-card-content>
+  
+</mat-card>
+

@@ -1,0 +1,51 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Code Column -->
+  <ng-container matColumnDef="code">
+    <th mat-header-cell *matHeaderCellDef> {{'logs.code' | translate}} </th>
+    <td mat-cell *matCellDef="let element"> 
+      <app-logs-icon-severity
+        [severity]="element.severity"
+      ></app-logs-icon-severity>
+      {{element.code}} 
+    </td>
+  </ng-container>
+
+  <!-- Module Column -->
+  <ng-container matColumnDef="module">
+    <th mat-header-cell *matHeaderCellDef> {{'logs.module' | translate}} </th>
+    <td mat-cell *matCellDef="let element"> {{element.module}} </td>
+  </ng-container>
+
+  <!-- Time Column -->
+  <ng-container matColumnDef="time">
+    <th mat-header-cell *matHeaderCellDef> {{'logs.date-time' | translate}} </th>
+    <td mat-cell *matCellDef="let element"> {{element.time | date}} </td>
+  </ng-container>
+
+  <!-- Title Column -->
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef> {{'logs.title' | translate}} </th>
+    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+    class="table-row"
+    (click)="viewLog(row)"
+    [ngClass]="{
+      pending: row.status === 'pending'
+    }"
+  ></tr>
+</table>
+
+<mat-paginator [pageIndex]="currentPage" [pageSize]="currentPageSize" [length]="totalElements" showFirstLastButtons></mat-paginator>
+
+<button mat-button
+  mat-raised-button
+  [color]="'primary'"
+  (click)="acknowledgeAll()"
+>{{'logs.acknowledge-all' | translate}}</button>

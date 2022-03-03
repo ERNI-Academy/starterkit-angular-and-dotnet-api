@@ -1,0 +1,16 @@
+
+<!-- crossorigin="anonymous"
+ Is needed if you want to take a screenshot of an external video source (in principle only needed for testing)
+ This on the other side makes the current 'poster' image fail to load due to "No 'Access-Control-Allow-Origin' header".
+-->
+<video 
+  #video
+  crossorigin="anonymous"
+  [attr.width]="width" autoplay="autoplay" 
+  [attr.controls]="showControls ? '' : null"
+  [attr.poster]="showPoster ? 'https://us.123rf.com/450wm/chernetskiy/chernetskiy0910/chernetskiy091000005/5683977-how-car-is-designed-image-in-wireframe.jpg?ver=6' : null"
+>
+  <source *ngIf="showAPIVideo" src="/api/streaming/earth" type="video/webm">
+  <!-- <source *ngIf="showCarVideo" src="https://media.gettyimages.com/videos/the-vehicle-car-technology-and-digital-analysis-4k-video-id1202161028"> -->
+  <source *ngIf="showCarVideo" src="https://media.gettyimages.com/videos/car-wireframe-video-id472872949">
+</video>

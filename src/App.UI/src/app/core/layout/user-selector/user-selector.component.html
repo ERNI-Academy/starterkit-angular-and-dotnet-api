@@ -1,0 +1,32 @@
+
+<button mat-button
+[matMenuTriggerFor]="menu"
+>
+  <mat-icon>account_box</mat-icon>
+  {{userName$ | async}}
+</button>
+<mat-menu #menu="matMenu" style="display: none">
+  <button
+    mat-menu-item
+    (click)="clickMainItem()"
+  >
+    {{ 'layout.login-action' | translate }}
+  </button>
+  <button
+    mat-menu-item
+    (click)="changePassword()"
+  >
+    {{ 'layout.changePassword' | translate }}
+  </button>
+  <button
+    mat-menu-item
+  >
+    {{ 'layout.preferences' | translate }}
+  </button>
+  <button
+    mat-menu-item
+    (click)="logout()"
+  >
+    {{ 'layout.logout' | translate }}
+  </button>
+</mat-menu>

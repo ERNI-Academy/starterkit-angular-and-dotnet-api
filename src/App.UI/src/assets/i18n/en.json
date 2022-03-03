@@ -1,0 +1,59 @@
+{
+	"base": {
+		"action": {
+			"cancel": "Cancel",
+			"ok": "Ok",
+			"save": "Save"
+		},
+		"confirmation": {
+			"confirm-action": "Confirm",
+			"title": "Confirmation"
+		},
+		"home": "Home",
+		"logs": "Logs",
+		"messages": {
+			"executed-successful": "Executed successfully",
+			"general-error": "General error",
+			"pending-changes-confirmation": "Are you sure you want to leave without saving your changes?"
+		},
+		"upload-file-here": "Upload file here"
+	},
+	"layout": {
+		"changePassword": "Change password",
+		"login-action": "Login",
+		"login": {
+			"changePasswordSuccess": "Change password success",
+			"confirmPassword": "Confirm password",
+			"errors": {
+				"mismatch": "Repeat same password"
+			},
+			"newPassword": "New password",
+			"password": "Password",
+			"title": "Title",
+			"user": "User"
+		},
+		"logout": "Logout",
+		"preferences": "Preferences"
+	},
+	"logs": {
+		"acknowledge": "Acknowledge",
+		"acknowledge-all": "Acknowledge all",
+		"actions": "Actions",
+		"code": "Code",
+		"date-time": "Date & time",
+		"description": "Description",
+		"module": "Module",
+		"show-logs": "Show logs",
+		"title": "Title"
+	},
+	"overview": {
+		"CVG-operation": "CVG operation",
+		"UVT-operation": "UVT operation",
+		"idle": "Idle",
+		"linked": "Linked",
+		"ready": "Ready",
+		"resetting": "Resetting",
+		"searching": "Searching",
+		"synching": "Synching"
+	}
+}

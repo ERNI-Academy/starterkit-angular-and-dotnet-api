@@ -1,0 +1,16 @@
+@import "variables.scss";
+
+table {
+  width: 100%;
+}
+
+.table-row {
+  cursor: pointer;
+  &:hover {
+    background-color: $app-light-gray;
+  }
+}
+
+tr.pending {
+  font-weight: bold;
+}

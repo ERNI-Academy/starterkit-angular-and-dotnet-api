@@ -1,0 +1,18 @@
+
+<div class="main-container" [ngClass]="alarmStateClass()">
+  <div class="centered-container">
+    <mat-card>
+      <img class="overview-image" src="/assets/images/wheel-robot-logo-icon-design-vector-22914226.jpg">
+    </mat-card>
+    <div class="status-blocks">
+      <app-operation-status 
+        [states]="UVTOperationStates | async" 
+        [operationName]="UVTOperationName" 
+        [title]="UVTOperationTitle"></app-operation-status>
+      <app-operation-status
+        [states]="CVGOperationStates | async" 
+        [operationName]="CVGOperationName" 
+        [title]="CVGOperationTitle"></app-operation-status>
+    </div>
+  </div>
+</div>

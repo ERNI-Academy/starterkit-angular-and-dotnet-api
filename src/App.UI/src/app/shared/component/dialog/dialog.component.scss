@@ -1,0 +1,55 @@
+@import 'variables.scss';
+
+.app-dialog-container {
+  mat-dialog-container.mat-dialog-container {
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .dialog-top-container {
+    border-top: 4px solid black;
+  
+    .dialog-header {
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-left: 32px;
+    
+      .close-icon{
+        margin: 16px;
+      }
+    }
+    
+    .dialog-title {
+      display: flex;
+      align-items: center;
+      margin: 0px;
+    }
+    
+    .dialog-content {
+      padding: 16px 64px 8px 32px;
+      margin: 0;
+    }
+    
+    .dialog-actions {
+      justify-content: flex-end;
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      // border-top: 1px solid $gray-light;
+      margin-bottom: 0px;
+      padding: 8px 16px;
+  
+      button {
+        margin-left: 16px;
+      }
+  
+    }
+  
+  }
+  
+
+}
+
+
