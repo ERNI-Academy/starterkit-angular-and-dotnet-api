@@ -1,6 +1,7 @@
 # About StarterKitAngularAndDotnetApi
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## **Introduction**
@@ -160,5 +161,16 @@ Erni_Services  - [@ERNI](https://twitter.com/ERNI) - esp-services@betterask.erni
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/davidwalker2235"><img src="https://avatars.githubusercontent.com/u/14020687?v=4?s=100" width="100px;" alt=""/><br /><sub><b>davidwalker2235</b></sub></a><br /><a href="https://github.com/ERNI-Academy/starterkit-angular-and-dotnet-api/commits?author=davidwalker2235" title="Code">💻</a> <a href="#content-davidwalker2235" title="Content">🖋</a> <a href="https://github.com/ERNI-Academy/starterkit-angular-and-dotnet-api/commits?author=davidwalker2235" title="Documentation">📖</a> <a href="#design-davidwalker2235" title="Design">🎨</a> <a href="#ideas-davidwalker2235" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-davidwalker2235" title="Maintenance">🚧</a> <a href="https://github.com/ERNI-Academy/starterkit-angular-and-dotnet-api/commits?author=davidwalker2235" title="Tests">⚠️</a> <a href="#example-davidwalker2235" title="Examples">💡</a> <a href="https://github.com/ERNI-Academy/starterkit-angular-and-dotnet-api/pulls?q=is%3Apr+reviewed-by%3Adavidwalker2235" title="Reviewed Pull Requests">👀</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
