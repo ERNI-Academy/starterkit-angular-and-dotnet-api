@@ -6,6 +6,8 @@ on:
     secrets:
         SONAR_TOKEN_API:
           required: true
+        SONAR_TOKEN_WEB:
+          required: true
   workflow_dispatch: ~
 jobs:
   sonarcloud:
@@ -20,6 +22,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.11
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -36,19 +41,32 @@ jobs:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarCloud scanner
+      - name: Install NET SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Build and analyze
+      - name: SonarCloud Begin
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_API }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: .\.sonar\scanner\dotnet-sonarscanner begin /k:"starterkit-angular-and-dotnet-api" /o:"erni-academy" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects="true"
+      - name: NET Project Restore and Build
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"starterkit-angular-and-dotnet-api_api" /o:"erni-academy" /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects="true"
           dotnet restore .\src\App.API\App.Api.sln
           dotnet build .\src\App.API\App.Api.sln --configuration Release --no-restore
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}"
+      - name: Install Web Dependencies
+        working-directory: ./src/App.UI
+        run: npm ci
+      - name: Build Web Application
+        working-directory: ./src/App.UI
+        run: npm run build:prod
+      - name: SonarCloud End
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
