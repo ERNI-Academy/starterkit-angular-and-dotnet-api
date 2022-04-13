@@ -44,6 +44,23 @@
         "example",
         "review"
       ]
+    },
+    {
+      "login": "axeltaylor",
+      "name": "Axel Taylor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5933493?v=4",
+      "profile": "https://github.com/axeltaylor",
+      "contributions": [
+        "code",
+        "content",
+        "doc",
+        "design",
+        "ideas",
+        "maintenance",
+        "test",
+        "example",
+        "review"
+      ]
     }
   ],
   "projectName": "starterkit-angular-and-dotnet-api"
