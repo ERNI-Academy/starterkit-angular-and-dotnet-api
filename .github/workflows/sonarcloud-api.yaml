@@ -48,7 +48,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_API }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"starterkit-angular-and-dotnet-api_api" /o:"erni-academy" /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects="true" /d:sonar.working.directory=".\src\App.API"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"starterkit-angular-and-dotnet-api_api" /o:"erni-academy" /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects="true"
           dotnet restore .\src\App.API\App.Api.sln
           dotnet build .\src\App.API\App.Api.sln --configuration Release --no-restore
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}" /d:sonar.working.directory=".\src\App.API"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}"
