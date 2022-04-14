@@ -4,7 +4,7 @@ on:
     types: [opened, synchronize, reopened]
   workflow_call:
     secrets:
-        SONAR_TOKEN_WEB:
+        SONAR_TOKEN:
           required: true
   workflow_dispatch: ~
 jobs:
@@ -27,6 +27,6 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_WEB }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: ./src/App.UI
