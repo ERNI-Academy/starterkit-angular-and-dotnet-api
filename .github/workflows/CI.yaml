@@ -55,25 +55,3 @@ jobs:
           dotnet restore .\src\App.Api.sln
           dotnet build .\src\App.Api.sln --configuration Release --no-restore
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-  # SonarCloud_Web:
-  #   name: Analize Web code and publish to sonarcloud
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: ./src/App.UI
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 16
-  #     - run: npm ci
-  #     - run: npm run build:prod
-  #     - name: SonarCloud Scan
-  #       uses: SonarSource/sonarcloud-github-action@master
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #       with:
-  #         projectBaseDir: ./src/App.UI
