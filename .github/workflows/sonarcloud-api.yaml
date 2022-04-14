@@ -1,17 +1,18 @@
-name: Gated Checkin
-
+name: SonarCloud Scan API
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_call:
     secrets:
-        SONAR_TOKEN:
+        SONAR_TOKEN_API:
           required: true
   workflow_dispatch: ~
-
 jobs:
-  SonarCloud_Api:
-    name: Analize API code and publish to sonarcloud
+  sonarcloud:
+    name: SonarCloud
     runs-on: windows-latest
     steps:
       - name: Setup .NET
@@ -47,10 +48,10 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_API }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"ERNI-Academy_starterkit-angular-and-dotnet-api" /o:"erni-academy" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects="true"
-          dotnet restore .\src\App.Api.sln
-          dotnet build .\src\App.Api.sln --configuration Release --no-restore
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"erni-academy_starterkit-angular-and-dotnet-api_api" /o:"erni-academy" /n:"starterkit-angular-and-dotnet-api_api"  /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.dotnet.excludeTestProjects="true"
+          dotnet restore .\src\App.API\App.Api.sln
+          dotnet build .\src\App.API\App.Api.sln --configuration Release --no-restore
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN_API }}"
