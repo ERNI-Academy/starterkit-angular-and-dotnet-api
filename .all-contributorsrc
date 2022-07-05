@@ -10,58 +10,5 @@
   "repoHost": "https://github.com",
   "skipCi": true,
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
-  "contributors": [
-    {
-      "login": "davidwalker2235",
-      "name": "davidwalker2235",
-      "avatar_url": "https://avatars.githubusercontent.com/u/14020687?v=4",
-      "profile": "https://github.com/davidwalker2235",
-      "contributions": [
-        "code",
-        "content",
-        "doc",
-        "design",
-        "ideas",
-        "maintenance",
-        "test",
-        "example",
-        "review"
-      ]
-    },
-    {
-      "login": "Rabosa616",
-      "name": "Rabosa616",
-      "avatar_url": "https://avatars.githubusercontent.com/u/12774781?v=4",
-      "profile": "https://github.com/Rabosa616",
-      "contributions": [
-        "code",
-        "content",
-        "doc",
-        "design",
-        "ideas",
-        "maintenance",
-        "test",
-        "example",
-        "review"
-      ]
-    },
-    {
-      "login": "axeltaylor",
-      "name": "Axel Taylor",
-      "avatar_url": "https://avatars.githubusercontent.com/u/5933493?v=4",
-      "profile": "https://github.com/axeltaylor",
-      "contributions": [
-        "code",
-        "content",
-        "doc",
-        "design",
-        "ideas",
-        "maintenance",
-        "test",
-        "example",
-        "review"
-      ]
-    }
-  ],
-  "projectName": "starterkit-angular-and-dotnet-api"
+  "contributors": []
 }
