@@ -32,7 +32,7 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "angular-gridster2": "^13.3.0",
     "angular-resize-event": "^3.1.1",
-    "d3": "^6.1.1",
+    "d3": "^7.6.1",
     "ng-block-ui": "^3.0.2",
     "ng5-slider": "^1.2.4",
     "ngx-popper": "^7.0.0",
